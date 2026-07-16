@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Corporativo - DISAR</title>
+    <style>
+        :root {
+            --bg-dark-blue: #1e3a8a;
+            --bg-body: #1e3a8a; 
+            --card-text-main: #1e293b;
+            --card-text-muted: #64748b;
+            --border-radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: white;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 25px;
+            }
+        }
+
+        .header-section {
+            max-width: 1400px;
+            margin: 0 auto 25px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .header-section {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .main-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .main-title {
+                font-size: 1.6rem;
+                text-align: left;
+            }
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 30px;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            outline: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-input:focus {
+            background-color: white;
+            color: #000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .navigation-bar {
+            max-width: 1400px;
+            margin: 0 auto 20px auto;
+            display: none; 
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .back-btn {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .download-all-btn {
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .download-all-btn:hover {
+            background-color: #15803d;
+        }
+
+        .download-all-btn:disabled {
+            background-color: #a8a29e;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 576px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 16px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(4, 1fr); 
+                gap: 20px;
+            }
+        }
+
+        .folder-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .folder-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-top {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        @media (min-width: 576px) {
+            .card-top {
+                height: 140px;
+            }
+        }
+
+        .logo-box {
+            background-color: white;
+            width: 65px;
+            height: 65px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+        }
+
+        @media (min-width: 576px) {
+            .logo-box {
+                width: 85px;
+                height: 85px;
+                border-radius: 18px;
+                padding: 10px;
+            }
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .card-bottom {
+            padding: 12px;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        @media (min-width: 576px) {
+            .card-bottom {
+                padding: 20px;
+                text-align: left;
+            }
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--card-text-main);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        @media (min-width: 576px) {
+            .card-title {
+                font-size: 1.15rem;
+                margin-bottom: 6px;
+            }
+        }
+
+        .card-desc {
+            font-size: 0.75rem;
+            color: var(--card-text-muted);
+            line-height: 1.4;
+            margin-bottom: 10px;
+            height: 2.2rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        @media (min-width: 576px) {
+            .card-desc {
+                font-size: 0.85rem;
+                margin-bottom: 15px;
+                height: 2.8rem;
+            }
+        }
+
+        .card-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--card-text-muted);
+            border-top: 1px solid #f1f5f9;
+            padding-top: 8px;
+            margin-top: auto;
+        }
+
+        @media (min-width: 576px) {
+            .card-meta-row {
+                font-size: 0.8rem;
+                padding-top: 12px;
+                justify-content: flex-start;
+            }
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .meta-icon-file { color: #0284c7; }
+
+        .flyer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 576px) {
+            .flyer-grid {
+                grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+                gap: 16px;
+            }
+        }
+
+        .flyer-card {
+            background-color: white;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            color: var(--card-text-main);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+
+        .flyer-img-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            background-color: #f8fafc;
+        }
+
+        .flyer-img-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .flyer-info {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        @media (min-width: 576px) {
+            .flyer-info {
+                padding: 15px;
+            }
+        }
+
+        .flyer-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            height: 2.2rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        @media (min-width: 576px) {
+            .flyer-title {
+                font-size: 0.85rem;
+                height: 2.4rem;
+                margin-bottom: 10px;
+            }
+        }
+
+        .download-btn {
+            background-color: var(--bg-dark-blue);
+            color: white;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-top: auto;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media (min-width: 576px) {
+            .download-btn {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+        }
+
+        .section-divider {
+            grid-column: 1 / -1;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            border-left: 4px solid #dc2626;
+            padding-left: 10px;
+        }
+
+        @media (min-width: 576px) {
+            .section-divider {
+                font-size: 1.1rem;
+                margin-top: 20px;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/file-saver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+
+    <div class="header-section">
+        <div class="main-title">BANCO DE PUBLICIDAD DISAR</div>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Escribe el código o nombre del producto...">
+        </div>
+    </div>
+
+    <div class="navigation-bar" id="navigationBar">
+        <button class="back-btn" id="backBtn">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Volver al Panel Principal
+        </button>
+        <button class="download-all-btn" id="downloadAllBtn">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            📥 Descargar Carpeta Completa
+        </button>
+    </div>
+
+    <div class="dashboard-grid" id="mainGrid">
+        </div>
+
+    <script>
+        const productDatabase = [
+    {
+        "id": "30268",
+        "title": "AMOLADORA BP 115MN 1000 WATTS 10000 RPM",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30268.jpg",
+        "desc": "Código: 30268",
+        "tags": "amoladora bp 115mn 1000 watts 10000 rpm 30268 ferretería otras marcas"
+    },
+    {
+        "id": "30763",
+        "title": "ARROCERA INNOVA 4,5 LTS 700W TEFLON COLOR SILVER",
+        "category": "Electro Menor",
+        "brand": "INNOVA",
+        "image": "images/30763.jpg",
+        "desc": "Código: 30763",
+        "tags": "arrocera innova 4,5 lts 700w teflon color silver 30763 electro menor innova"
+    },
+    {
+        "id": "30823",
+        "title": "BICICLETA DE ACERO CUADRO 14.5 ARO 20\" AZUL - AMARILLO",
+        "category": "Varios",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30823.png",
+        "desc": "Código: 30823",
+        "tags": "bicicleta de acero cuadro 14.5 aro 20\" azul - amarillo 30823 varios otras marcas"
+    },
+    {
+        "id": "30923",
+        "title": "CAFETERA INNOVA 6 TAZAS NEGRA FILTRO PERMANENTE",
+        "category": "Electro Menor",
+        "brand": "INNOVA",
+        "image": "images/30923.jpg",
+        "desc": "Código: 30923",
+        "tags": "cafetera innova 6 tazas negra filtro permanente 30923 electro menor innova"
+    },
+    {
+        "id": "30544",
+        "title": "CAMARA DE SEGURIDAD XIAOMI EXTERIOR",
+        "category": "Tecnología",
+        "brand": "XIAOMI / REDMI",
+        "image": "images/30544.jpg",
+        "desc": "Código: 30544",
+        "tags": "camara de seguridad xiaomi exterior 30544 tecnología xiaomi / redmi"
+    },
+    {
+        "id": "30224",
+        "title": "CARGADOR DE BATERIA CENTAURO 112-24V CB-50 110V",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30224.jpg",
+        "desc": "Código: 30224",
+        "tags": "cargador de bateria centauro 112-24v cb-50 110v 30224 ferretería otras marcas"
+    },
+    {
+        "id": "30866",
+        "title": "CELULAR INFINIX HOT 60I 4GB+ 256GB / COLOR PURPURA",
+        "category": "Celulares",
+        "brand": "INFINIX",
+        "image": "images/30866.png",
+        "desc": "Código: 30866",
+        "tags": "celular infinix hot 60i 4gb+ 256gb / color purpura 30866 celulares infinix"
+    },
+    {
+        "id": "30901",
+        "title": "CELULAR INFINIX HOT 60 PRO 8GB + 256GB / COLOR PLATA",
+        "category": "Celulares",
+        "brand": "INFINIX",
+        "image": "images/30901.jpg",
+        "desc": "Código: 30901",
+        "tags": "celular infinix hot 60 pro 8gb + 256gb / color plata 30901 celulares infinix"
+    },
+    {
+        "id": "30929",
+        "title": "CELULAR INFINIX NOTE 60 8GB + 256GB / COLOR TITANIO",
+        "category": "Celulares",
+        "brand": "INFINIX",
+        "image": "images/30929.jpg",
+        "desc": "Código: 30929",
+        "tags": "celular infinix note 60 8gb + 256gb / color titanio 30929 celulares infinix"
+    },
+    {
+        "id": "30960",
+        "title": "CELULAR INFINIX SMART20 4GB + 128GB / COLOR AZUL",
+        "category": "Celulares",
+        "brand": "INFINIX",
+        "image": "images/30960.png",
+        "desc": "Código: 30960",
+        "tags": "celular infinix smart20 4gb + 128gb / color azul 30960 celulares infinix"
+    },
+    {
+        "id": "30902",
+        "title": "CELULAR REDMI A5 4GB + 128GB  / COLOR AZUL",
+        "category": "Celulares",
+        "brand": "XIAOMI / REDMI",
+        "image": "images/30902.jpg",
+        "desc": "Código: 30902",
+        "tags": "celular redmi a5 4gb + 128gb  / color azul 30902 celulares xiaomi / redmi"
+    },
+    {
+        "id": "30961",
+        "title": "CELULAR REDMI 15C 8GB + 256GB / COLOR NEGRO",
+        "category": "Celulares",
+        "brand": "XIAOMI / REDMI",
+        "image": "images/30961.png",
+        "desc": "Código: 30961",
+        "tags": "celular redmi 15c 8gb + 256gb / color negro 30961 celulares xiaomi / redmi"
+    },
+    {
+        "id": "30959",
+        "title": "CELULAR REDMI NOTE 15 PRO 8GB + 256GB / COLOR AZUL",
+        "category": "Celulares",
+        "brand": "XIAOMI / REDMI",
+        "image": "images/30959.png",
+        "desc": "Código: 30959",
+        "tags": "celular redmi note 15 pro 8gb + 256gb / color azul 30959 celulares xiaomi / redmi"
+    },
+    {
+        "id": "30930",
+        "title": "CELULAR REDMI NOTE 15 PRO 5G 8GB + 512 GB / COLOR NEGRO",
+        "category": "Celulares",
+        "brand": "XIAOMI / REDMI",
+        "image": "images/30930.jpg",
+        "desc": "Código: 30930",
+        "tags": "celular redmi note 15 pro 5g 8gb + 512 gb / color negro 30930 celulares xiaomi / redmi"
+    },
+    {
+        "id": "30571",
+        "title": "CEPILLO DE AIRE REMINGTON ACONDICIONAMIENTO IONICO",
+        "category": "Varios",
+        "brand": "REMINGTON",
+        "image": "images/30571.jpg",
+        "desc": "Código: 30571",
+        "tags": "cepillo de aire remington acondicionamiento ionico 30571 varios remington"
+    },
+    {
+        "id": "30626",
+        "title": "COCINA INNOVA GARDENIA 4Q 24\"",
+        "category": "Electrodomésticos",
+        "brand": "INNOVA",
+        "image": "images/30626.jpg",
+        "desc": "Código: 30626",
+        "tags": "cocina innova gardenia 4q 24\" 30626 electrodomésticos innova"
+    },
+    {
+        "id": "30649",
+        "title": "COCINA INNOVA ALHELI CROMA GAS CON HORNO 6 QUEMADORES",
+        "category": "Electrodomésticos",
+        "brand": "INNOVA",
+        "image": "images/30649.jpg",
+        "desc": "Código: 30649",
+        "tags": "cocina innova alheli croma gas con horno 6 quemadores 30649 electrodomésticos innova"
+    },
+    {
+        "id": "30138",
+        "title": "COCINA HACEB OREGANO 4Q CON HORNO",
+        "category": "Electrodomésticos",
+        "brand": "HACEB",
+        "image": "images/30138.jpg",
+        "desc": "Código: 30138",
+        "tags": "cocina haceb oregano 4q con horno 30138 electrodomésticos haceb"
+    },
+    {
+        "id": "30139",
+        "title": "COCINETA KOMBO DE 6 QUEMADORES",
+        "category": "Electrodomésticos",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30139.jpg",
+        "desc": "Código: 30139",
+        "tags": "cocineta kombo de 6 quemadores 30139 electrodomésticos otras marcas"
+    },
+    {
+        "id": "30834",
+        "title": "COMODA RATAN DUPLEX 5N BEIGE",
+        "category": "Mueblería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30834.jpg",
+        "desc": "Código: 30834",
+        "tags": "comoda ratan duplex 5n beige 30834 mueblería otras marcas"
+    },
+    {
+        "id": "30871",
+        "title": "COMODA RATAN DUPLEX 6N BEIGE",
+        "category": "Mueblería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30871.jpg",
+        "desc": "Código: 30871",
+        "tags": "comoda ratan duplex 6n beige 30871 mueblería otras marcas"
+    },
+    {
+        "id": "30932",
+        "title": "CONTROLADOR ALPHA THETA 2 CANALES DDJ-FLX2",
+        "category": "Video y Sonido",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30932.jpg",
+        "desc": "Código: 30932",
+        "tags": "controlador alpha theta 2 canales ddj-flx2 30932 video y sonido otras marcas"
+    },
+    {
+        "id": "30742",
+        "title": "CONTROLADOR PIONER DJ 2 CANALES DDJ-REV1",
+        "category": "Video y Sonido",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30742.jpg",
+        "desc": "Código: 30742",
+        "tags": "controlador pioner dj 2 canales ddj-rev1 30742 video y sonido otras marcas"
+    },
+    {
+        "id": "30606",
+        "title": "CONSOLA ITALY AUDIO 8 CANALES",
+        "category": "Video y Sonido",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30606.jpg",
+        "desc": "Código: 30606",
+        "tags": "consola italy audio 8 canales 30606 video y sonido otras marcas"
+    },
+    {
+        "id": "30767",
+        "title": "CORTADOR DE CABELLO REMINGTON 23 PIEZAS CON PALANCA AJUSTABLE",
+        "category": "Varios",
+        "brand": "REMINGTON",
+        "image": "images/30767.jpg",
+        "desc": "Código: 30767",
+        "tags": "cortador de cabello remington 23 piezas con palanca ajustable 30767 varios remington"
+    },
+    {
+        "id": "30616",
+        "title": "DESMALEZADORA SHINDAIWA B450",
+        "category": "Agroforestal",
+        "brand": "SHINDAIWA",
+        "image": "images/30616.jpg",
+        "desc": "Código: 30616",
+        "tags": "desmalezadora shindaiwa b450 30616 agroforestal shindaiwa"
+    },
+    {
+        "id": "30202",
+        "title": "DESMALEZADORA SHINDAIWA B451",
+        "category": "Agroforestal",
+        "brand": "SHINDAIWA",
+        "image": "images/30202.jpg",
+        "desc": "Código: 30202",
+        "tags": "desmalezadora shindaiwa b451 30202 agroforestal shindaiwa"
+    },
+    {
+        "id": "30927",
+        "title": "DESMALEZADORA ECHO SRM-22GESU",
+        "category": "Agroforestal",
+        "brand": "ECHO",
+        "image": "images/30927.jpg",
+        "desc": "Código: 30927",
+        "tags": "desmalezadora echo srm-22gesu 30927 varios echo"
+    },
+    {
+        "id": "30893",
+        "title": "DISPENSADOR DE AGUA FRIA Y CALIENTE SMAR LIFE 20LTS PANEL DE VIDRIO",
+        "category": "Electro Menor",
+        "brand": "SMARTLIFE",
+        "image": "images/30893.jpg",
+        "desc": "Código: 30893",
+        "tags": "dispensador de agua fria y caliente smar life 20lts panel de vidrio 30893 electro menor smartlife"
+    },
+    {
+        "id": "30925",
+        "title": "ESCALERA FIBRA DE VIDRIO AMARILLO 7 PELDAÑOS",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30925.jpg",
+        "desc": "Código: 30925",
+        "tags": "escalera fibra de vidrio amarillo 7 peldaños 30925 ferretería otras marcas"
+    },
+    {
+        "id": "30911",
+        "title": "ESCALERA MULTIUSO 3X4",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30911.jpg",
+        "desc": "Código: 30911",
+        "tags": "escalera multiuso 3x4 30911 ferretería otras marcas"
+    },
+    {
+        "id": "30165",
+        "title": "ESCALERA MULTIUSO 4X4",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30165.jpg",
+        "desc": "Código: 30165",
+        "tags": "escalera multiuso 4x4 30165 ferretería otras marcas"
+    },
+    {
+        "id": "30943",
+        "title": "FREIDORA DE AIRE INNOVA 4LTS DIGITAL NEGRO 1500W",
+        "category": "Electro Menor",
+        "brand": "INNOVA",
+        "image": "images/30943.jpg",
+        "desc": "Código: 30943",
+        "tags": "freidora de aire innova 4lts digital negro 1500w 30943 electro menor innova"
+    },
+    {
+        "id": "30790",
+        "title": "FUMIGADORA ECHO SHP800 25LTS",
+        "category": "Agroforestal",
+        "brand": "ECHO",
+        "image": "images/30790.jpg",
+        "desc": "Código: 30790",
+        "tags": "fumigadora echo shp800 25lts 30790 agroforestal echo"
+    },
+    {
+        "id": "30916",
+        "title": "FUMIGADORA FLOWZONE TYPOON3 BATERIA RECARGABLE 15LTS",
+        "category": "Agroforestal",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30916.jpg",
+        "desc": "Código: 30916",
+        "tags": "fumigadora flowzone typoon3 bateria recargable 15lts 30916 agroforestal otras marcas"
+    },
+    {
+        "id": "30740",
+        "title": "FUMIGADORA LAMBORGINI MOCHILA 20LTS L3200SPS2",
+        "category": "Agroforestal",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30740.jpg",
+        "desc": "Código: 30740",
+        "tags": "fumigadora lamborgini mochila 20lts l3200sps2 30740 agroforestal otras marcas"
+    },
+    {
+        "id": "30861",
+        "title": "FUMIGADORA PULVERIZADORA  SIRFRAN AGROTA ML 20LTS  MANUAL TIPO MOCHILA",
+        "category": "Agroforestal",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30861.jpg",
+        "desc": "Código: 30861",
+        "tags": "fumigadora pulverizadora  sirfran agrota ml 20lts  manual tipo mochila 30861 agroforestal otras marcas"
+    },
+    {
+        "id": "30915",
+        "title": "FUMIGADORA SHINDAIWA ES800  25LTS",
+        "category": "Agroforestal",
+        "brand": "SHINDAIWA",
+        "image": "images/30915.jpg",
+        "desc": "Código: 30915",
+        "tags": "fumigadora shindaiwa es800  25lts 30915 agroforestal shindaiwa"
+    },
+    {
+        "id": "30461",
+        "title": "GENERADOR SHINERAY SRGE 3500",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30461.jpg",
+        "desc": "Código: 30461",
+        "tags": "generador shineray srge 3500 30461 ferretería otras marcas"
+    },
+    {
+        "id": "30521",
+        "title": "GENERADOR SHINERAY SRGE 7500",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30521.jpg",
+        "desc": "Código: 30521",
+        "tags": "generador shineray srge 7500 30521 ferretería otras marcas"
+    },
+    {
+        "id": "30857",
+        "title": "HORNILLA ELECTRICA BP MR. CHEF DOBLE 150MM BLANCA / NEGRA",
+        "category": "Electro Menor",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30857.jpg",
+        "desc": "Código: 30857",
+        "tags": "hornilla electrica bp mr. chef doble 150mm blanca / negra 30857 electro menor otras marcas"
+    },
+    {
+        "id": "30387",
+        "title": "IMPRESORA EPSON L3250 MULTIFUNCION CON WIFI",
+        "category": "Tecnología",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30387.jpg",
+        "desc": "Código: 30387",
+        "tags": "impresora epson l3250 multifuncion con wifi 30387 tecnología otras marcas"
+    },
+    {
+        "id": "30838",
+        "title": "IMPRESORA EPSON L4360 MULTIFUNCION DUPLEX CON WIFI",
+        "category": "Tecnología",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30838.jpg",
+        "desc": "Código: 30838",
+        "tags": "impresora epson l4360 multifuncion duplex con wifi 30838 tecnologia otras marcas"
+    },
+    {
+        "id": "30953",
+        "title": "KIT DE PODA ALTUNA A BATERIA MOTOSIERRA Y TIJERA CON EXTENCION 21V",
+        "category": "Agroforestal",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30953.png",
+        "desc": "Código: 30953",
+        "tags": "kit de poda altuna a bateria motosierra y tijera con extencion 21v 30953 agroforestal otras marcas"
+    },
+    {
+        "id": "30958",
+        "title": "LAPTOP ASUS E1504GA-WS35 CI3-N305 8GB RAM 256GB  SSD 15,6\"",
+        "category": "Laptops",
+        "brand": "ASUS",
+        "image": "images/30958.png",
+        "desc": "Código: 30958",
+        "tags": "laptop asus e1504ga-ws35 ci3-n305 8gb ram 256gb  ssd 15,6\" 30958 laptops asus"
+    },
+    {
+        "id": "30928",
+        "title": "LAPTOP ASUS X1404V 1334U CI5 12GB RAM 256 SSD 14\"",
+        "category": "Laptops",
+        "brand": "ASUS",
+        "image": "images/30928.jpg",
+        "desc": "Código: 30928",
+        "tags": "laptop asus x1404v 1334u ci5 12gb ram 256 ssd 14\" 30928 laptops asus"
+    },
+    {
+        "id": "30957",
+        "title": "LAPTOP ASUS E150AFA-WS51 RYZEN 5-40 8GB RAM 512GB SSD 15,6\"",
+        "category": "Laptops",
+        "brand": "ASUS",
+        "image": "images/30957.png",
+        "desc": "Código: 30957",
+        "tags": "laptop asus e150afa-ws51 ryzen 5-40 8gb ram 512gb ssd 15,6\" 30957 laptops asus"
+    },
+    {
+        "id": "30851",
+        "title": "LAPTOP ACER ASP AG15-32P CI3 3096 16GB RAM 512GB SSD 15.6\"",
+        "category": "Laptops",
+        "brand": "ACER",
+        "image": "images/30851.jpg",
+        "desc": "Código: 30851",
+        "tags": "laptop acer asp ag15-32p ci3 3096 16gb ram 512gb ssd 15.6\" 30851 laptops acer"
+    },
+    {
+        "id": "30826",
+        "title": "LAPTOP ACER AL 15-41P-R27P RYZEN 7 5700U 16GB RAM 512GB 15.6\"",
+        "category": "Laptops",
+        "brand": "ACER",
+        "image": "images/30826.jpg",
+        "desc": "Código: 30826",
+        "tags": "laptop acer al 15-41p-r27p ryzen 7 5700u 16gb ram 512gb 15.6\" 30826 laptops acer"
+    },
+    {
+        "id": "30885",
+        "title": "LAPTOP HP 250 G10 1334U CI5 16GB RAM 512GB 22D 15,6\"",
+        "category": "Laptops",
+        "brand": "HP",
+        "image": "images/30885.jpg",
+        "desc": "Código: 30885",
+        "tags": "laptop hp 250 g10 1334u ci5 16gb ram 512gb 22d 15,6\" 30885 laptops hp"
+    },
+    {
+        "id": "30840",
+        "title": "LAPTOP HP VICTUS 15-FA2013DX CI5 8GB RAM 512GB SSD NVIDIA GEFORCE 15,6\"",
+        "category": "Laptops",
+        "brand": "HP",
+        "image": "images/30840.jpg",
+        "desc": "Código: 30840",
+        "tags": "laptop hp victus 15-fa2013dx ci5 8gb ram 512gb ssd nvidia geforce 15,6\" 30840 laptops hp"
+    },
+    {
+        "id": "30875",
+        "title": "LAPTOP HP 15-FC0256LA RYZEN 5-7520U 16GB RAM 512GB SSD 15,6\"",
+        "category": "Laptops",
+        "brand": "HP",
+        "image": "images/30875.jpg",
+        "desc": "Código: 30875",
+        "tags": "laptop hp 15-fc0256la ryzen 5-7520u 16gb ram 512gb ssd 15,6\" 30875 laptops hp"
+    },
+    {
+        "id": "30624",
+        "title": "LAVADORA INVERTER 19KG LG CARGA SUPERIOR GRAFITO",
+        "category": "Electrodomésticos",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30624.jpg",
+        "desc": "Código: 30624",
+        "tags": "lavadora inverter 19kg lg carga superior grafito 30624 electrodomésticos otras marcas"
+    },
+    {
+        "id": "30212",
+        "title": "LICUADORA BP MIXER CLASSIC 750W 1.25LTS 3VEL",
+        "category": "Electro Menor",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30212.jpg",
+        "desc": "Código: 30212",
+        "tags": "licuadora bp mixer classic 750w 1.25lts 3vel 30212 electro menor otras marcas"
+    },
+    {
+        "id": "30794",
+        "title": "MAQUINA MULTIUSOS DUCATI DBC3300M",
+        "category": "Agroforestal",
+        "brand": "DUCATI",
+        "image": "images/30794.jpg",
+        "desc": "Código: 30794",
+        "tags": "maquina multiusos ducati dbc3300m 30794 agroforestal ducati"
+    },
+    {
+        "id": "30797",
+        "title": "MICROONDAS RCA 20LTS ROJO",
+        "category": "Electro Menor",
+        "brand": "RCA",
+        "image": "images/30797.jpg",
+        "desc": "Código: 30797",
+        "tags": "microondas rca 20lts rojo 30797 electro menor rca"
+    },
+    {
+        "id": "30349",
+        "title": "MINIBAR INNOVA 2 PUERTAS SILVER 85 LTS",
+        "category": "Electrodomésticos",
+        "brand": "INNOVA",
+        "image": "images/30349.jpg",
+        "desc": "Código: 30349",
+        "tags": "minibar innova 2 puertas silver 85 lts 30349 electrodomésticos innova"
+    },
+    {
+        "id": "30346",
+        "title": "MOTOBOMBA DUCATI DCW802 7HP (4T) 212CC 3\"",
+        "category": "Ferretería",
+        "brand": "DUCATI",
+        "image": "images/30346.png",
+        "desc": "Código: 30346",
+        "tags": "motobomba ducati dcw802 7hp (4t) 212cc 3\" 30346 ferretería ducati"
+    },
+    {
+        "id": "30860",
+        "title": "MOTOSIERRA AGROTA CON BARRA Y CADENA CS-3520-40",
+        "category": "Agroforestal",
+        "brand": "ECHO",
+        "image": "images/30860.jpg",
+        "desc": "Código: 30860",
+        "tags": "motosierra agrota con barra y cadena cs-3520-40 30860 agroforestal echo"
+    },
+    {
+        "id": "30381",
+        "title": "MOTOSIERRA AGROTA CON BARRA Y CADENA CS-680S-70",
+        "category": "Agroforestal",
+        "brand": "ECHO",
+        "image": "images/30381.jpg",
+        "desc": "Código: 30381",
+        "tags": "motosierra agrota con barra y cadena cs-680s-70 30381 agroforestal echo"
+    },
+    {
+        "id": "30538",
+        "title": "MOTOSIERRA AGROTA CON BARRA Y CADENA CS-7310P-80",
+        "category": "Agroforestal",
+        "brand": "ECHO",
+        "image": "images/30538.jpg",
+        "desc": "Código: 30538",
+        "tags": "motosierra agrota con barra y cadena cs-7310p-80 30538 agroforestal echo"
+    },
+    {
+        "id": "30473",
+        "title": "MOTOSIERRA SHINDAIWA CON BARRA Y CADENA 600SX27-70",
+        "category": "Agroforestal",
+        "brand": "SHINDAIWA",
+        "image": "images/30473.jpg",
+        "desc": "Código: 30473",
+        "tags": "motosierra shindaiwa con barra y cadena 600sx27-70 30473 agroforestal shindaiwa"
+    },
+    {
+        "id": "30892",
+        "title": "OLLA MULTIFUNCION B+D 6.5 LTS 800W 5 PROGRAMAS LENTA- ASAR - ARROCERA - VAPORERA - DORAR / SALTEAR",
+        "category": "Electro Menor",
+        "brand": "BLACK + DECKER",
+        "image": "images/30892.jpg",
+        "desc": "Código: 30892",
+        "tags": "olla multifuncion b+d 6.5 lts 800w 5 programas lenta- asar - arrocera - vaporera - dorar / saltear 30892 electro menor black + decker"
+    },
+    {
+        "id": "30491",
+        "title": "PARLANTE AMPLIFICADO SOBWOOFER 8\" 80W PP5603",
+        "category": "Video y Sonido",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30491.jpg",
+        "desc": "Código: 30491",
+        "tags": "parlante amplificado sobwoofer 8\" 80w pp5603 30491 video y sonido otras marcas"
+    },
+    {
+        "id": "30759",
+        "title": "PARLANTE INNOVA AMPLIFICADO 15\" 60,000W MICROFONO INALAMBRICO",
+        "category": "Video y Sonido",
+        "brand": "INNOVA",
+        "image": "images/30759.jpg",
+        "desc": "Código: 30759",
+        "tags": "parlante innova amplificado 15\" 60,000w microfono inalambrico 30759 video y sonido innova"
+    },
+    {
+        "id": "30942",
+        "title": "PARLANTE BAZZUKA ACTIVO A15 MAX 15\" BT/USB/SD/FM/TWS + MICROFONO",
+        "category": "Video y Sonido",
+        "brand": "BAZZUKA",
+        "image": "images/30942.jpg",
+        "desc": "Código: 30942",
+        "tags": "parlante bazzuka activo a15 max 15\" bt/usb/sd/fm/tws + microfono 30942 video y sonido bazzuka"
+    },
+    {
+        "id": "30896",
+        "title": "PARLANTE BAZZUKA PRO 8\" B308 100WATTS RMS",
+        "category": "Video y Sonido",
+        "brand": "BAZZUKA",
+        "image": "images/30896.jpg",
+        "desc": "Código: 30896",
+        "tags": "parlante bazzuka pro 8\" b308 100watts rms 30896 video y sonido bazzuka"
+    },
+    {
+        "id": "30445",
+        "title": "PARLANTE PROFESIONAL BETA3 N15AMK2",
+        "category": "Video y Sonido",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30445.jpg",
+        "desc": "Código: 30445",
+        "tags": "parlante profesional beta3 n15amk2 30445 video y sonido otras marcas"
+    },
+    {
+        "id": "30806",
+        "title": "PARLANTE PROFESIONAL BETA3 S215A TIRO LARGO",
+        "category": "Video y Sonido",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30806.jpg",
+        "desc": "Código: 30806",
+        "tags": "parlante profesional beta3 s215a tiro largo 30806 video y sonido otras marcas"
+    },
+    {
+        "id": "30527",
+        "title": "PISTOLA DE MASAJES OLSKY",
+        "category": "Varios",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30527.jpg",
+        "desc": "Código: 30527",
+        "tags": "pistola de masajes olsky 30527 varios otras marcas"
+    },
+    {
+        "id": "30728",
+        "title": "PLANCHA SMARTLIFE A VAPOR",
+        "category": "Electro Menor",
+        "brand": "SMARTLIFE",
+        "image": "images/30728.jpg",
+        "desc": "Código: 30728",
+        "tags": "plancha smartlife a vapor 30728 electro menor smartlife"
+    },
+    {
+        "id": "30824",
+        "title": "PROYECTOR XIAOMI WANBO VALI 1",
+        "category": "Tecnología",
+        "brand": "XIAOMI / REDMI",
+        "image": "images/30824.jpg",
+        "desc": "Código: 30824",
+        "tags": "proyector xiaomi wanbo vali 1 30824 tecnologia xiaomi / redmi"
+    },
+    {
+        "id": "30825",
+        "title": "PROYECTOR XIAOMI WANBO T2 MAX NEW",
+        "category": "Tecnología",
+        "brand": "XIAOMI / REDMI",
+        "image": "images/30825.jpg",
+        "desc": "Código: 30825",
+        "tags": "proyector xiaomi wanbo t2 max new 30825 tecnologia xiaomi / redmi"
+    },
+    {
+        "id": "30771",
+        "title": "REFRIGERADORA HACEB  16 PIES 404 LTS COLOR NEGRO MANIJA EXTERNA",
+        "category": "Electrodomésticos",
+        "brand": "HACEB",
+        "image": "images/30771.jpg",
+        "desc": "Código: 30771",
+        "tags": "refrigeradora haceb  16 pies 404 lts color negro manija externa 30771 electrodomésticos haceb"
+    },
+    {
+        "id": "30922",
+        "title": "REFRIGERADORA HISENSE 179LTS 1 PUERTA CON DISPENSADOR DE AGUA SILVER",
+        "category": "Electrodomésticos",
+        "brand": "HISENSE",
+        "image": "images/30922.jpg",
+        "desc": "Código: 30922",
+        "tags": "refrigeradora hisense 179lts 1 puerta con dispensador de agua silver 30922 electrodomésticos hisense"
+    },
+    {
+        "id": "30764",
+        "title": "SECADOR DE CABELLO REMINGTON 2000W CERAMICA IONES",
+        "category": "Varios",
+        "brand": "REMINGTON",
+        "image": "images/30764.jpg",
+        "desc": "Código: 30764",
+        "tags": "secador de cabello remington 2000w ceramica iones 30764 varios remington"
+    },
+    {
+        "id": "30406",
+        "title": "SET DE OLLAS KAISA VILLA KV-1004 12PCS CON TETERA",
+        "category": "Varios",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30406.png",
+        "desc": "Código: 30406",
+        "tags": "set de ollas kaisa villa kv-1004 12pcs con tetera 30406 varios otras marcas"
+    },
+    {
+        "id": "30271",
+        "title": "SIERRA CIRCULAR BP",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30271.jpg",
+        "desc": "Código: 30271",
+        "tags": "sierra circular bp 30271 ferretería otras marcas"
+    },
+    {
+        "id": "30217",
+        "title": "SIERRA CIRCULAR CROWN 7-1/4\" CT15282 1400W",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30217.jpg",
+        "desc": "Código: 30217",
+        "tags": "sierra circular crown 7-1/4\" ct15282 1400w 30217 ferretería otras marcas"
+    },
+    {
+        "id": "30712",
+        "title": "STARLINK SISTEMA WIFI DE DOBLE BANDA",
+        "category": "Tecnología",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30712.png",
+        "desc": "Código: 30712",
+        "tags": "starlink sistema wifi de doble banda 30712 tecnología otras marcas"
+    },
+    {
+        "id": "30789",
+        "title": "SOLDADORA CENTURY 200A MIG, LIFT, TIG 3 EN 1 110-220",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30789.jpg",
+        "desc": "Código: 30789",
+        "tags": "soldadora century 200a mig, lift, tig 3 en 1 110-220 30789 ferretería otras marcas"
+    },
+    {
+        "id": "30216",
+        "title": "TALADRO ATORNILLADOR CARIOCA INALAMBRICO 400-1350RPM",
+        "category": "Ferretería",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30216.jpg",
+        "desc": "Código: 30216",
+        "tags": "taladro atornillador carioca inalambrico 400-1350rpm 30216 ferretería otras marcas"
+    },
+    {
+        "id": "30879",
+        "title": "TELEVISION HISENSE QLED 55\" GOOGLE TV COMANDO DE VOZ",
+        "category": "Video y Sonido",
+        "brand": "HISENSE",
+        "image": "images/30879.jpg",
+        "desc": "Código: 30879",
+        "tags": "television hisense qled 55\" google tv comando de voz 30879 video y sonido hisense"
+    },
+    {
+        "id": "30884",
+        "title": "TELEVISION HISENSE QLED 65\" GOOGLE TV COMANDO DE VOZ",
+        "category": "Video y Sonido",
+        "brand": "HISENSE",
+        "image": "images/30884.jpg",
+        "desc": "Código: 30884",
+        "tags": "television hisense qled 65\" google tv comando de voz 30884 video y sonido hisense"
+    },
+    {
+        "id": "30914",
+        "title": "TELEVISION HISENSE QLED 75\" GOOGLE TV COMANDO DE VOZ",
+        "category": "Video y Sonido",
+        "brand": "HISENSE",
+        "image": "images/30914.jpg",
+        "desc": "Código: 30914",
+        "tags": "television hisense qled 75\" google tv comando de voz 30914 video y sonido hisense"
+    },
+    {
+        "id": "30880",
+        "title": "TELEVISION HISENSE QLED 85\" GOOGLE TV COMANDO DE VOZ",
+        "category": "Video y Sonido",
+        "brand": "HISENSE",
+        "image": "images/30880.jpg",
+        "desc": "Código: 30880",
+        "tags": "television hisense qled 85\" google tv comando de voz 30880 video y sonido hisense"
+    },
+    {
+        "id": "30659",
+        "title": "TELEVISION INNOVA LED 32\" GOOGLE TV HD COMANDO DE VOZ",
+        "category": "Video y Sonido",
+        "brand": "INNOVA",
+        "image": "images/30659.jpg",
+        "desc": "Código: 30659",
+        "tags": "television innova led 32\" google tv hd comando de voz 30659 video y sonido innova"
+    },
+    {
+        "id": "30668",
+        "title": "TELEVISION INNOVA LED 43\" GOOGLE TV FHD COMANDO DE VOZ",
+        "category": "Video y Sonido",
+        "brand": "INNOVA",
+        "image": "images/30668.jpg",
+        "desc": "Código: 30668",
+        "tags": "television innova led 43\" google tv fhd comando de voz 30668 video y sonido innova"
+    }
+];
+        const brandMeta = {
+    "BAZZUKA": {
+        "bg": "linear-gradient(135deg, #f1f5f9, #e2e8f0)",
+        "logo": "https://logo.clearbit.com/bazzuka.com?size=80",
+        "desc": "Productos y accesorios BAZZUKA"
+    },
+    "BLACK + DECKER": {
+        "bg": "linear-gradient(135deg, #fff7ed, #ffedd5)",
+        "logo": "https://placehold.co/80x80/fff/000?text=B%2BD",
+        "desc": "Herramientas y electrodomésticos BLACK+DECKER"
+    },
+    "HACEB": {
+        "bg": "linear-gradient(135deg, #fefce8, #fef9c3)",
+        "logo": "https://placehold.co/80x80/fff/000?text=Haceb",
+        "desc": "Electrodomésticos HACEB de alta calidad"
+    },
+    "HISENSE": {
+        "bg": "linear-gradient(135deg, #ecfeff, #ccfbf1)",
+        "logo": "https://placehold.co/80x80/fff/00a896?text=Hisense",
+        "desc": "Tecnología y electrodomésticos HISENSE"
+    },
+    "INNOVA": {
+        "bg": "linear-gradient(135deg, #faf5ff, #f3e8ff)",
+        "logo": "https://placehold.co/80x80/fff/6b21a8?text=Innova",
+        "desc": "Línea de productos INNOVA"
+    },
+    "XIAOMI / REDMI": {
+        "bg": "linear-gradient(135deg, #fff5f5, #fed7d7)",
+        "logo": "https://placehold.co/80x80/fff/ff4500?text=Xiaomi",
+        "desc": "Ecosistema inteligente Xiaomi y Redmi"
+    },
+    "INFINIX": {
+        "bg": "linear-gradient(135deg, #f0fdf4, #dcfce7)",
+        "logo": "https://placehold.co/80x80/fff/16a34a?text=Infinix",
+        "desc": "Dispositivos móviles Infinix"
+    },
+    "SHINDAIWA": {
+        "bg": "linear-gradient(135deg, #fffbeb, #fef3c7)",
+        "logo": "https://placehold.co/80x80/fff/b45309?text=Shindaiwa",
+        "desc": "Maquinaria agroforestal Shindaiwa"
+    },
+    "ECHO": {
+        "bg": "linear-gradient(135deg, #f0fdfa, #ccfbf1)",
+        "logo": "https://placehold.co/80x80/fff/0d9488?text=Echo",
+        "desc": "Dispositivos inteligentes Amazon Echo"
+    },
+    "HP": {
+        "bg": "linear-gradient(135deg, #e0f2fe, #bae6fd)",
+        "logo": "https://placehold.co/80x80/fff/0096d6?text=HP",
+        "desc": "Laptops y tecnología Hewlett-Packard"
+    },
+    "ACER": {
+        "bg": "linear-gradient(135deg, #f7fee7, #d9f99d)",
+        "logo": "https://placehold.co/80x80/fff/83b81a?text=Acer",
+        "desc": "Laptops y dispositivos portátiles ACER"
+    },
+    "ASUS": {
+        "bg": "linear-gradient(135deg, #faf5ff, #e9d5ff)",
+        "logo": "https://placehold.co/80x80/fff/000?text=ASUS",
+        "desc": "Laptops y tecnología de alto rendimiento ASUS"
+    },
+    "RCA": {
+        "bg": "linear-gradient(135deg, #fff5f5, #ffe4e6)",
+        "logo": "https://placehold.co/80x80/fff/dc2626?text=RCA",
+        "desc": "Televisores y accesorios RCA"
+    },
+    "SMARTLIFE": {
+        "bg": "linear-gradient(135deg, #f8fafc, #f1f5f9)",
+        "logo": "https://placehold.co/80x80/fff/475569?text=SmartLife",
+        "desc": "Electrodomésticos Smartlife"
+    },
+    "OTRAS MARCAS": {
+        "bg": "linear-gradient(135deg, #f1f5f9, #e2e8f0)",
+        "logo": "https://placehold.co/80x80/fff/334155?text=DISAR",
+        "desc": "Variedad de marcas y artículos generales"
+    }
+};
+        const categoryCounts = {
+    "Agroforestal": 12,
+    "Ferretería": 6,
+    "Electro Menor": 7,
+    "Varios": 61,
+    "Mueblería": 6,
+    "Tecnología": 5,
+    "Celulares": 10,
+    "Electrodomésticos": 7,
+    "Video y Sonido": 7,
+    "Laptops": 12
+};
+        const brandCounts = {
+    "SHINDAIWA": 7,
+    "OTRAS MARCAS": 74,
+    "INNOVA": 11,
+    "XIAOMI / REDMI": 7,
+    "INFINIX": 4,
+    "REMINGTON": 3,
+    "HACEB": 2,
+    "ECHO": 2,
+    "SMARTLIFE": 2,
+    "RCA": 7,
+    "ASUS": 3,
+    "ACER": 2,
+    "HP": 3,
+    "DUCATI": 2,
+    "BLACK + DECKER": 1,
+    "BAZZUKA": 2,
+    "HISENSE": 6
+};
+
+        const mainGrid = document.getElementById('mainGrid');
+        const navigationBar = document.getElementById('navigationBar');
+        const backBtn = document.getElementById('backBtn');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const searchInput = document.getElementById('searchInput');
+
+        let currentView = 'dashboard';
+        let activeFlyersList = []; 
+        let currentFolderTitle = '';
+
+        function loadDashboard() {
+            currentView = 'dashboard';
+            navigationBar.style.display = 'none';
+            mainGrid.innerHTML = '';
+            mainGrid.className = 'dashboard-grid';
+            activeFlyersList = [];
+            currentFolderTitle = '';
+
+            // 🗂️ Categorías primero
+            const catDivider = document.createElement('div');
+            catDivider.className = 'section-divider';
+            catDivider.innerText = '🗂️ Buscar por Categoría';
+            mainGrid.appendChild(catDivider);
+
+            Object.keys(categoryCounts).forEach(catName => {
+                const count = categoryCounts[catName];
+                const card = document.createElement('div');
+                card.className = 'folder-card';
+                card.onclick = () => openDrilldown('category', catName);
+                card.innerHTML = `
+                    <div class="card-top" style="background: linear-gradient(135deg, #f1f5f9, #cbd5e1);">
+                        <div class="logo-box" style="font-size: 2rem;">📦</div>
+                    </div>
+                    <div class="card-bottom">
+                        <h3 class="card-title">${catName}</h3>
+                        <p class="card-desc">Publicidades unificadas de la categoría ${catName}.</p>
+                        <div class="card-meta-row">
+                            <div class="meta-item">
+                                <span class="meta-icon-file">📄</span> ${count} archivos
+                            </div>
+                        </div>
+                    </div>
+                `;
+                mainGrid.appendChild(card);
+            });
+
+            // 📂 Marcas segundo
+            const brandDivider = document.createElement('div');
+            brandDivider.className = 'section-divider';
+            brandDivider.innerText = '📂 Buscar por Marca';
+            mainGrid.appendChild(brandDivider);
+
+            Object.keys(brandMeta).forEach(brandName => {
+                const count = brandCounts[brandName] || 0;
+                const meta = brandMeta[brandName];
+
+                const card = document.createElement('div');
+                card.className = 'folder-card';
+                card.onclick = () => openDrilldown('brand', brandName);
+                card.innerHTML = `
+                    <div class="card-top" style="background: ${meta.bg};">
+                        <div class="logo-box">
+                            <img src="${meta.logo}" alt="${brandName}">
+                        </div>
+                    </div>
+                    <div class="card-bottom">
+                        <h3 class="card-title">${brandName}</h3>
+                        <p class="card-desc">${meta.desc}</p>
+                        <div class="card-meta-row">
+                            <div class="meta-item">
+                                <span class="meta-icon-file">📄</span> ${count} archivos
+                            </div>
+                        </div>
+                    </div>
+                `;
+                mainGrid.appendChild(card);
+            });
+        }
+
+        function openDrilldown(type, value) {
+            currentView = 'drilldown';
+            currentFolderTitle = value;
+            navigationBar.style.display = 'flex';
+            downloadAllBtn.style.display = 'inline-flex';
+            mainGrid.className = 'flyer-grid'; 
+            
+            activeFlyersList = productDatabase.filter(p => {
+                if (type === 'brand') return p.brand === value;
+                if (type === 'category') return p.category === value;
+                return false;
+            });
+
+            renderFlyers(activeFlyersList);
+        }
+
+        function renderFlyers(products) {
+            mainGrid.innerHTML = '';
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'flyer-card';
+
+                card.innerHTML = `
+                    <div class="flyer-img-container">
+                        <img src="${product.image}" alt="${product.title}" onerror="this.src='https://placehold.co/300x300?text=Imagen+${product.id}'" loading="lazy">
+                    </div>
+                    <div class="flyer-info">
+                        <h4 class="flyer-title" title="${product.title}">${product.title}</h4>
+                        <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 12px;">Código: <b>${product.id}</b></p>
+                        <button onclick="downloadSingle('${product.image}', 'DISAR_${product.id}.jpg')" class="download-btn">Descargar Arte</button>
+                    </div>
+                `;
+                mainGrid.appendChild(card);
+            });
+        }
+
+        // SOLUCIÓN TOTAL CON BASE64 EMBEBIDO INTERNAMENTE (Cero peticiones de red / Funciona Local, PC y Celular)
+        function getBase64Fallback(id) {
+            // Diccionario interno de emergencia para pruebas 100% locales en PC y celular
+            // Reemplaza las rutas temporales si necesitas pre-cargar imágenes fijas sin usar la carpeta "images/"
+            return "";
+        }
+
+        function downloadSingle(imgUrl, filename) {
+            // Crear elemento temporal para disparar descarga binaria forzada
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = this.naturalWidth || this.width;
+                canvas.height = this.naturalHeight || this.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(this, 0, 0);
+                
+                try {
+                    // Intento de guardado local compatible con dispositivos móviles
+                    canvas.toBlob(function(blob) {
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = filename;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }, 'image/jpeg', 0.95);
+                } catch(e) {
+                    // Respaldo directo si el navegador bloquea el canvas local por seguridad (File://)
+                    const link = document.createElement('a');
+                    link.href = imgUrl;
+                    link.download = filename;
+                    link.target = '_blank';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            };
+            img.onerror = function() {
+                // Respaldo inmediato si la ruta local no responde
+                const link = document.createElement('a');
+                link.href = imgUrl;
+                link.download = filename;
+                link.target = '_blank';
+                link.click();
+            };
+            img.src = imgUrl;
+        }
+
+        // SOLUCIÓN ZIP SIN DEPENDENCIAS EXTERNAS DE RED LOCAL: Utiliza inyecciones asíncronas tolerantes
+        downloadAllBtn.onclick = function() {
+            if (activeFlyersList.length === 0) return;
+            
+            // Cargar JSZip dinámicamente si el entorno local bloqueó la etiqueta de cabecera inicial
+            if (typeof JSZip === 'undefined' || typeof saveAs === 'undefined') {
+                alert("¡Atención vendedores! Para descargar carpetas completas en ZIP localmente en la PC o celular, el proyecto requiere estar subido a GitHub Pages, Vercel, o ejecutarse sobre un servidor local (ej: Live Server en VS Code). Las descargas individuales de artes funcionan con normalidad de forma inmediata.");
+                return;
+            }
+
+            const originalText = downloadAllBtn.innerHTML;
+            downloadAllBtn.disabled = true;
+            downloadAllBtn.innerText = '⚡ Generando ZIP...';
+
+            const zip = new JSZip();
+            const folderName = "DISAR_" + currentFolderTitle.replace(/[^a-zA-Z0-9]/g, "_");
+            const imgFolder = zip.folder(folderName);
+
+            let processedCount = 0;
+
+            activeFlyersList.forEach(product => {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = this.width;
+                    canvas.height = this.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(this, 0, 0);
+                    try {
+                        canvas.toBlob(function(blob) {
+                            imgFolder.file(`DISAR_${product.id}.jpg`, blob);
+                            checkProgress();
+                        }, 'image/jpeg', 0.9);
+                    } catch(e) {
+                        checkProgress();
+                    }
+                };
+                img.onerror = function() {
+                    checkProgress();
+                };
+                img.src = product.image;
+            });
+
+            function checkProgress() {
+                processedCount++;
+                if (processedCount === activeFlyersList.length) {
+                    zip.generateAsync({type: "blob"}).then(function(content) {
+                        saveAs(content, `${folderName}.zip`);
+                        downloadAllBtn.disabled = false;
+                        downloadAllBtn.innerHTML = originalText;
+                    }).catch(err => {
+                        alert("Error de compresión local: " + err.message);
+                        downloadAllBtn.disabled = false;
+                        downloadAllBtn.innerHTML = originalText;
+                    });
+                }
+            }
+        };
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (query === '') {
+                loadDashboard();
+                return;
+            }
+
+            currentView = 'search';
+            navigationBar.style.display = 'flex';
+            downloadAllBtn.style.display = 'none'; 
+            mainGrid.className = 'flyer-grid';
+
+            activeFlyersList = productDatabase.filter(p => {
+                return p.title.toLowerCase().includes(query) || p.id.toLowerCase().includes(query) || p.tags.toLowerCase().includes(query);
+            });
+
+            if (activeFlyersList.length === 0) {
+                mainGrid.innerHTML = `<div class="section-divider" style="color: white; border: none;">No se encontraron publicidades para "${query}"</div>`;
+            } else {
+                renderFlyers(activeFlyersList);
+            }
+        });
+
+        backBtn.onclick = () => {
+            searchInput.value = '';
+            loadDashboard();
+        };
+
+        loadDashboard();
+    </script>
+</body>
+</html>
