@@ -121,7 +121,6 @@
             background-color: rgba(255,255,255,0.3);
         }
 
-        /* Botón de descarga masiva directa sin ZIP */
         .download-all-btn {
             background-color: #16a34a;
             color: white;
@@ -420,6 +419,8 @@
             }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/file-saver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
 
@@ -442,7 +443,8 @@
     </div>
 
     <div class="dashboard-grid" id="mainGrid">
-        </div>
+        <!-- Generado dinámicamente por JS -->
+    </div>
 
     <script>
         const productDatabase = [
@@ -621,26 +623,26 @@
         "id": "30834",
         "title": "COMODA RATAN DUPLEX 5N BEIGE",
         "category": "Mueblería",
-        "brand": "OTRAS MARCAS",
+        "brand": "CONSUPLAST",
         "image": "images/30834.jpg",
         "desc": "Código: 30834",
-        "tags": "comoda ratan duplex 5n beige 30834 mueblería otras marcas"
+        "tags": "comoda ratan duplex 5n beige 30834 mueblería consuplast"
     },
     {
         "id": "30871",
         "title": "COMODA RATAN DUPLEX 6N BEIGE",
         "category": "Mueblería",
-        "brand": "OTRAS MARCAS",
+        "brand": "CONSUPLAST",
         "image": "images/30871.jpg",
         "desc": "Código: 30871",
-        "tags": "comoda ratan duplex 6n beige 30871 mueblería otras marcas"
+        "tags": "comoda ratan duplex 6n beige 30871 mueblería consuplast"
     },
     {
         "id": "30932",
         "title": "CONTROLADOR ALPHA THETA 2 CANALES DDJ-FLX2",
         "category": "Video y Sonido",
         "brand": "OTRAS MARCAS",
-        "image": "images/30932.jpg",
+        "image": "images/30932.png",
         "desc": "Código: 30932",
         "tags": "controlador alpha theta 2 canales ddj-flx2 30932 video y sonido otras marcas"
     },
@@ -649,7 +651,7 @@
         "title": "CONTROLADOR PIONER DJ 2 CANALES DDJ-REV1",
         "category": "Video y Sonido",
         "brand": "OTRAS MARCAS",
-        "image": "images/30742.jpg",
+        "image": "images/30742.png",
         "desc": "Código: 30742",
         "tags": "controlador pioner dj 2 canales ddj-rev1 30742 video y sonido otras marcas"
     },
@@ -792,19 +794,19 @@
         "id": "30461",
         "title": "GENERADOR SHINERAY SRGE 3500",
         "category": "Ferretería",
-        "brand": "OTRAS MARCAS",
+        "brand": "SHINERAY",
         "image": "images/30461.jpg",
         "desc": "Código: 30461",
-        "tags": "generador shineray srge 3500 30461 ferretería otras marcas"
+        "tags": "generador shineray srge 3500 30461 ferretería shineray"
     },
     {
         "id": "30521",
         "title": "GENERADOR SHINERAY SRGE 7500",
         "category": "Ferretería",
-        "brand": "OTRAS MARCAS",
+        "brand": "SHINERAY",
         "image": "images/30521.jpg",
         "desc": "Código: 30521",
-        "tags": "generador shineray srge 7500 30521 ferretería otras marcas"
+        "tags": "generador shineray srge 7500 30521 ferretería shineray"
     },
     {
         "id": "30857",
@@ -819,19 +821,19 @@
         "id": "30387",
         "title": "IMPRESORA EPSON L3250 MULTIFUNCION CON WIFI",
         "category": "Tecnología",
-        "brand": "OTRAS MARCAS",
+        "brand": "EPSON",
         "image": "images/30387.jpg",
         "desc": "Código: 30387",
-        "tags": "impresora epson l3250 multifuncion con wifi 30387 tecnología otras marcas"
+        "tags": "impresora epson l3250 multifuncion con wifi 30387 tecnología epson"
     },
     {
         "id": "30838",
         "title": "IMPRESORA EPSON L4360 MULTIFUNCION DUPLEX CON WIFI",
         "category": "Tecnología",
-        "brand": "OTRAS MARCAS",
+        "brand": "EPSON",
         "image": "images/30838.jpg",
         "desc": "Código: 30838",
-        "tags": "impresora epson l4360 multifuncion duplex con wifi 30838 tecnologia otras marcas"
+        "tags": "impresora epson l4360 multifuncion duplex con wifi 30838 tecnologia epson"
     },
     {
         "id": "30953",
@@ -1053,19 +1055,19 @@
         "id": "30445",
         "title": "PARLANTE PROFESIONAL BETA3 N15AMK2",
         "category": "Video y Sonido",
-        "brand": "OTRAS MARCAS",
+        "brand": "BETA 3",
         "image": "images/30445.jpg",
         "desc": "Código: 30445",
-        "tags": "parlante profesional beta3 n15amk2 30445 video y sonido otras marcas"
+        "tags": "parlante profesional beta3 n15amk2 30445 video y sonido beta 3"
     },
     {
         "id": "30806",
         "title": "PARLANTE PROFESIONAL BETA3 S215A TIRO LARGO",
         "category": "Video y Sonido",
-        "brand": "OTRAS MARCAS",
+        "brand": "BETA 3",
         "image": "images/30806.jpg",
         "desc": "Código: 30806",
-        "tags": "parlante profesional beta3 s215a tiro largo 30806 video y sonido otras marcas"
+        "tags": "parlante profesional beta3 s215a tiro largo 30806 video y sonido beta 3"
     },
     {
         "id": "30527",
@@ -1141,12 +1143,12 @@
     },
     {
         "id": "30271",
-        "title": "SIERRA CIRCULAR BP",
+        "title": "SET DE HERRAMIENTAS BP",
         "category": "Ferretería",
         "brand": "OTRAS MARCAS",
         "image": "images/30271.jpg",
         "desc": "Código: 30271",
-        "tags": "sierra circular bp 30271 ferretería otras marcas"
+        "tags": "set de herramientas bp 30271 ferretería otras marcas"
     },
     {
         "id": "30217",
@@ -1242,7 +1244,7 @@
         const brandMeta = {
     "BAZZUKA": {
         "bg": "linear-gradient(135deg, #f1f5f9, #e2e8f0)",
-        "logo": "https://logo.clearbit.com/bazzuka.com?size=80",
+        "logo": "https://placehold.co/80x80/fff/000?text=Bazzuka",
         "desc": "Productos y accesorios BAZZUKA"
     },
     "BLACK + DECKER": {
@@ -1285,6 +1287,26 @@
         "logo": "https://placehold.co/80x80/fff/0d9488?text=Echo",
         "desc": "Dispositivos inteligentes Amazon Echo"
     },
+    "EPSON": {
+        "bg": "linear-gradient(135deg, #eff6ff, #bae6fd)",
+        "logo": "https://placehold.co/80x80/fff/003399?text=Epson",
+        "desc": "Impresoras y tecnología de inyección de tinta EPSON"
+    },
+    "SHINERAY": {
+        "bg": "linear-gradient(135deg, #fffbeb, #fde68a)",
+        "logo": "https://placehold.co/80x80/fff/cc0000?text=Shineray",
+        "desc": "Generadores y maquinaria de energía SHINERAY"
+    },
+    "CONSUPLAST": {
+        "bg": "linear-gradient(135deg, #f0fdf4, #bbf7d0)",
+        "logo": "https://placehold.co/80x80/fff/0d9488?text=Consuplast",
+        "desc": "Artículos plásticos e industriales CONSUPLAST"
+    },
+    "BETA 3": {
+        "bg": "linear-gradient(135deg, #f8fafc, #cbd5e1)",
+        "logo": "https://placehold.co/80x80/fff/1e293b?text=Beta3",
+        "desc": "Equipos de sonido y audio profesional BETA 3"
+    },
     "HP": {
         "bg": "linear-gradient(135deg, #e0f2fe, #bae6fd)",
         "logo": "https://placehold.co/80x80/fff/0096d6?text=HP",
@@ -1304,6 +1326,11 @@
         "bg": "linear-gradient(135deg, #fff5f5, #ffe4e6)",
         "logo": "https://placehold.co/80x80/fff/dc2626?text=RCA",
         "desc": "Televisores y accesorios RCA"
+    },
+    "REMINGTON": {
+        "bg": "linear-gradient(135deg, #fff7ed, #fed7aa)",
+        "logo": "https://placehold.co/80x80/fff/c2410c?text=Remington",
+        "desc": "Línea de cuidado personal y belleza REMINGTON"
     },
     "SMARTLIFE": {
         "bg": "linear-gradient(135deg, #f8fafc, #f1f5f9)",
@@ -1345,7 +1372,11 @@
     "DUCATI": 2,
     "BLACK + DECKER": 1,
     "BAZZUKA": 2,
-    "HISENSE": 6
+    "HISENSE": 6,
+    "EPSON": 2,
+    "SHINERAY": 2,
+    "CONSUPLAST": 2,
+    "BETA 3": 2
 };
 
         const mainGrid = document.getElementById('mainGrid');
@@ -1463,7 +1494,6 @@
             });
         }
 
-        // DESCARGA INDIVIDUAL NATIVA: Ahora lee la URL relativa en Pages de forma segura y fuerza la descarga binaria sin abrir pestañas
         function downloadSingle(imgUrl, filename) {
             fetch(imgUrl)
                 .then(response => {
@@ -1481,7 +1511,6 @@
                     URL.revokeObjectURL(blobURL);
                 })
                 .catch(() => {
-                    // Respaldo inmediato si el navegador del celular está en modo WebView estricto (WhatsApp)
                     const link = document.createElement('a');
                     link.href = imgUrl;
                     link.download = filename;
@@ -1492,7 +1521,6 @@
                 });
         }
 
-        // DESCARGA MASIVA DIRECTA EN LOTE (SIN ZIP): Descarga cada imagen de forma asíncrona una por una de manera consecutiva
         downloadAllBtn.onclick = function() {
             if (activeFlyersList.length === 0) return;
             
@@ -1500,7 +1528,6 @@
             downloadAllBtn.disabled = true;
             
             let i = 0;
-            // Intervalo corto de ráfaga para evitar que el navegador del celular bloquee múltiples descargas simultáneas por spam
             const interval = setInterval(() => {
                 if (i >= activeFlyersList.length) {
                     clearInterval(interval);
@@ -1513,7 +1540,7 @@
                 downloadAllBtn.innerText = `⚡ Descargando (${i + 1}/${activeFlyersList.length})...`;
                 downloadSingle(product.image, `DISAR_${product.id}.jpg`);
                 i++;
-            }, 400); // 400 milisegundos de retraso entre descargas para asegurar el flujo en celulares
+            }, 400); 
         };
 
         searchInput.addEventListener('input', (e) => {
