@@ -121,6 +121,7 @@
             background-color: rgba(255,255,255,0.3);
         }
 
+        /* Botón de descarga masiva directa sin ZIP */
         .download-all-btn {
             background-color: #16a34a;
             color: white;
@@ -419,8 +420,6 @@
             }
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/file-saver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
 
@@ -438,7 +437,7 @@
         </button>
         <button class="download-all-btn" id="downloadAllBtn">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            📥 Descargar Carpeta Completa
+            📥 Descargar Todo en Lote
         </button>
     </div>
 
@@ -1464,35 +1463,25 @@
             });
         }
 
-        // SOLUCIÓN TOTAL CON BASE64 EMBEBIDO INTERNAMENTE (Cero peticiones de red / Funciona Local, PC y Celular)
-        function getBase64Fallback(id) {
-            // Diccionario interno de emergencia para pruebas 100% locales en PC y celular
-            // Reemplaza las rutas temporales si necesitas pre-cargar imágenes fijas sin usar la carpeta "images/"
-            return "";
-        }
-
+        // DESCARGA INDIVIDUAL NATIVA: Ahora lee la URL relativa en Pages de forma segura y fuerza la descarga binaria sin abrir pestañas
         function downloadSingle(imgUrl, filename) {
-            // Crear elemento temporal para disparar descarga binaria forzada
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                canvas.width = this.naturalWidth || this.width;
-                canvas.height = this.naturalHeight || this.height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(this, 0, 0);
-                
-                try {
-                    // Intento de guardado local compatible con dispositivos móviles
-                    canvas.toBlob(function(blob) {
-                        const link = document.createElement('a');
-                        link.href = URL.createObjectURL(blob);
-                        link.download = filename;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }, 'image/jpeg', 0.95);
-                } catch(e) {
-                    // Respaldo directo si el navegador bloquea el canvas local por seguridad (File://)
+            fetch(imgUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error();
+                    return response.blob();
+                })
+                .then(blob => {
+                    const blobURL = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = blobURL;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(blobURL);
+                })
+                .catch(() => {
+                    // Respaldo inmediato si el navegador del celular está en modo WebView estricto (WhatsApp)
                     const link = document.createElement('a');
                     link.href = imgUrl;
                     link.download = filename;
@@ -1500,76 +1489,31 @@
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                }
-            };
-            img.onerror = function() {
-                // Respaldo inmediato si la ruta local no responde
-                const link = document.createElement('a');
-                link.href = imgUrl;
-                link.download = filename;
-                link.target = '_blank';
-                link.click();
-            };
-            img.src = imgUrl;
+                });
         }
 
-        // SOLUCIÓN ZIP SIN DEPENDENCIAS EXTERNAS DE RED LOCAL: Utiliza inyecciones asíncronas tolerantes
+        // DESCARGA MASIVA DIRECTA EN LOTE (SIN ZIP): Descarga cada imagen de forma asíncrona una por una de manera consecutiva
         downloadAllBtn.onclick = function() {
             if (activeFlyersList.length === 0) return;
             
-            // Cargar JSZip dinámicamente si el entorno local bloqueó la etiqueta de cabecera inicial
-            if (typeof JSZip === 'undefined' || typeof saveAs === 'undefined') {
-                alert("¡Atención vendedores! Para descargar carpetas completas en ZIP localmente en la PC o celular, el proyecto requiere estar subido a GitHub Pages, Vercel, o ejecutarse sobre un servidor local (ej: Live Server en VS Code). Las descargas individuales de artes funcionan con normalidad de forma inmediata.");
-                return;
-            }
-
             const originalText = downloadAllBtn.innerHTML;
             downloadAllBtn.disabled = true;
-            downloadAllBtn.innerText = '⚡ Generando ZIP...';
-
-            const zip = new JSZip();
-            const folderName = "DISAR_" + currentFolderTitle.replace(/[^a-zA-Z0-9]/g, "_");
-            const imgFolder = zip.folder(folderName);
-
-            let processedCount = 0;
-
-            activeFlyersList.forEach(product => {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = this.width;
-                    canvas.height = this.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(this, 0, 0);
-                    try {
-                        canvas.toBlob(function(blob) {
-                            imgFolder.file(`DISAR_${product.id}.jpg`, blob);
-                            checkProgress();
-                        }, 'image/jpeg', 0.9);
-                    } catch(e) {
-                        checkProgress();
-                    }
-                };
-                img.onerror = function() {
-                    checkProgress();
-                };
-                img.src = product.image;
-            });
-
-            function checkProgress() {
-                processedCount++;
-                if (processedCount === activeFlyersList.length) {
-                    zip.generateAsync({type: "blob"}).then(function(content) {
-                        saveAs(content, `${folderName}.zip`);
-                        downloadAllBtn.disabled = false;
-                        downloadAllBtn.innerHTML = originalText;
-                    }).catch(err => {
-                        alert("Error de compresión local: " + err.message);
-                        downloadAllBtn.disabled = false;
-                        downloadAllBtn.innerHTML = originalText;
-                    });
+            
+            let i = 0;
+            // Intervalo corto de ráfaga para evitar que el navegador del celular bloquee múltiples descargas simultáneas por spam
+            const interval = setInterval(() => {
+                if (i >= activeFlyersList.length) {
+                    clearInterval(interval);
+                    downloadAllBtn.disabled = false;
+                    downloadAllBtn.innerHTML = originalText;
+                    return;
                 }
-            }
+                
+                const product = activeFlyersList[i];
+                downloadAllBtn.innerText = `⚡ Descargando (${i + 1}/${activeFlyersList.length})...`;
+                downloadSingle(product.image, `DISAR_${product.id}.jpg`);
+                i++;
+            }, 400); // 400 milisegundos de retraso entre descargas para asegurar el flujo en celulares
         };
 
         searchInput.addEventListener('input', (e) => {
