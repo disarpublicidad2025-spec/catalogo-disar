@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo Corporativo - DISAR</title>
+    <title>Catálogo - DISAR</title>
     <style>
         :root {
             --bg-dark-blue: #1e3a8a;
@@ -412,6 +412,24 @@
             padding-left: 10px;
         }
 
+        .logo-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-logo-img {
+            max-height: 60px; /* Ajusta la altura deseada para escritorio */
+            width: auto;
+            object-fit: contain;
+        }
+
+        @media (max-width: 767px) {
+            .header-logo-img {
+                max-height: 45px; /* Altura optimizada para pantallas de celulares */
+            }
+        }
+
         @media (min-width: 576px) {
             .section-divider {
                 font-size: 1.1rem;
@@ -425,7 +443,9 @@
 <body>
 
     <div class="header-section">
-        <div class="main-title">BANCO DE PUBLICIDAD DISAR</div>
+        <div class="logo-header">
+            <img src="images/logo_disar.png" alt="DISAR" class="header-logo-img">
+        </div>
         <div class="search-container">
             <input type="text" id="searchInput" class="search-input" placeholder="Escribe el código o nombre del producto...">
         </div>
@@ -872,15 +892,6 @@
         "tags": "laptop asus e150afa-ws51 ryzen 5-40 8gb ram 512gb ssd 15,6\" 30957 laptops asus"
     },
     {
-        "id": "30851",
-        "title": "LAPTOP ACER ASP AG15-32P CI3 3096 16GB RAM 512GB SSD 15.6\"",
-        "category": "Laptops",
-        "brand": "ACER",
-        "image": "images/30851.jpg",
-        "desc": "Código: 30851",
-        "tags": "laptop acer asp ag15-32p ci3 3096 16gb ram 512gb ssd 15.6\" 30851 laptops acer"
-    },
-    {
         "id": "30826",
         "title": "LAPTOP ACER AL 15-41P-R27P RYZEN 7 5700U 16GB RAM 512GB 15.6\"",
         "category": "Laptops",
@@ -915,6 +926,15 @@
         "image": "images/30875.jpg",
         "desc": "Código: 30875",
         "tags": "laptop hp 15-fc0256la ryzen 5-7520u 16gb ram 512gb ssd 15,6\" 30875 laptops hp"
+    },
+    {
+        "id": "30624",
+        "title": "LAVADORA SAMSUNG 19KG AUTOMATICA",
+        "category": "Electrodomésticos",
+        "brand": "OTRAS MARCAS",
+        "image": "images/30537.png",
+        "desc": "Código: 30537",
+        "tags": "lavadora samsung 19kg automatica 30624 electrodomésticos otras marcas"
     },
     {
         "id": "30624",
@@ -1142,15 +1162,6 @@
         "tags": "set de ollas kaisa villa kv-1004 12pcs con tetera 30406 varios otras marcas"
     },
     {
-        "id": "30271",
-        "title": "SET DE HERRAMIENTAS BP",
-        "category": "Ferretería",
-        "brand": "OTRAS MARCAS",
-        "image": "images/30271.jpg",
-        "desc": "Código: 30271",
-        "tags": "set de herramientas bp 30271 ferretería otras marcas"
-    },
-    {
         "id": "30217",
         "title": "SIERRA CIRCULAR CROWN 7-1/4\" CT15282 1400W",
         "category": "Ferretería",
@@ -1185,6 +1196,15 @@
         "image": "images/30216.jpg",
         "desc": "Código: 30216",
         "tags": "taladro atornillador carioca inalambrico 400-1350rpm 30216 ferretería otras marcas"
+    },
+    {
+        "id": "30879",
+        "title": "TELEVISION HISENSE MINILED 65\" GOOGLE TV COMANDO DE VOZ",
+        "category": "Video y Sonido",
+        "brand": "HISENSE",
+        "image": "images/30963.png",
+        "desc": "Código: 30963",
+        "tags": "television hisense miniled 65\" google tv comando de voz 30963 video y sonido hisense"
     },
     {
         "id": "30879",
