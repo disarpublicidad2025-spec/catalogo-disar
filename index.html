@@ -339,6 +339,7 @@
             width: 100%;
             padding-top: 100%;
             background-color: #f8fafc;
+            cursor: pointer;
         }
 
         .flyer-img-container img {
@@ -348,6 +349,11 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.2s ease;
+        }
+
+        .flyer-img-container:hover img {
+            transform: scale(1.03);
         }
 
         .flyer-info {
@@ -382,6 +388,13 @@
             }
         }
 
+        .card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: auto;
+        }
+
         .download-btn {
             background-color: var(--bg-dark-blue);
             color: white;
@@ -391,15 +404,40 @@
             font-size: 0.8rem;
             font-weight: 600;
             text-align: center;
-            margin-top: auto;
             border: none;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .download-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .preview-btn {
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 7px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .preview-btn:hover {
+            background-color: #e2e8f0;
+            color: #0f172a;
         }
 
         @media (min-width: 576px) {
             .download-btn {
-                padding: 10px;
+                padding: 9px;
                 font-size: 0.85rem;
+            }
+            .preview-btn {
+                font-size: 0.8rem;
             }
         }
 
@@ -422,14 +460,14 @@
         }
 
         .header-logo-img {
-            max-height: 60px; /* Ajusta la altura deseada para escritorio */
+            max-height: 60px;
             width: auto;
             object-fit: contain;
         }
 
         @media (max-width: 767px) {
             .header-logo-img {
-                max-height: 45px; /* Altura optimizada para pantallas de celulares */
+                max-height: 45px;
             }
         }
 
@@ -439,9 +477,123 @@
                 margin-top: 20px;
             }
         }
+
+        /* --- ESTILOS DEL MODAL DE PREVISUALIZACIÓN --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .modal-card {
+            background-color: white;
+            border-radius: 18px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            color: #0f172a;
+            animation: modalFadeIn 0.25s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: rgba(15, 23, 42, 0.6);
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            transition: background 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background-color: rgba(15, 23, 42, 0.9);
+        }
+
+        .modal-img-container {
+            width: 100%;
+            background-color: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .modal-img {
+            max-width: 100%;
+            max-height: 60vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .modal-body {
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #0f172a;
+        }
+
+        .modal-code {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .modal-download-btn {
+            background-color: #16a34a;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .modal-download-btn:hover {
+            background-color: #15803d;
+        }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/file-saver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
 
@@ -467,6 +619,24 @@
 
     <div class="dashboard-grid" id="mainGrid">
         <!-- Generado dinámicamente por JS -->
+    </div>
+
+    <!-- MODAL DE PREVISUALIZACIÓN -->
+    <div class="modal-overlay" id="previewModal" onclick="closeModalOnOverlay(event)">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="closePreviewModal()">&times;</button>
+            <div class="modal-img-container">
+                <img id="modalImage" src="" alt="Previsualización" class="modal-img">
+            </div>
+            <div class="modal-body">
+                <div class="modal-title" id="modalTitle"></div>
+                <div class="modal-code" id="modalCode"></div>
+                <button class="modal-download-btn" id="modalDownloadBtn">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    Descargar Arte
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -570,17 +740,6 @@
         "desc": "Código: 3110",
         "tags": "cafetera innova 12 tazas negra 3110 electro menor innova"
     },
-    /*
-    {
-        "id": "30923",
-        "title": "CAFETERA INNOVA 6 TAZAS NEGRA FILTRO PERMANENTE",
-        "category": "Electro Menor",
-        "brand": "INNOVA",
-        "image": "images/30923.jpg",
-        "desc": "Código: 30923",
-        "tags": "cafetera innova 6 tazas negra filtro permanente 30923 electro menor innova"
-    },
-    */
     {
         "id": "30231",
         "title": "CAMA MADERA ECONOMICA 2PLZ",
@@ -599,18 +758,7 @@
         "desc": "Código: 30364",
         "tags": "cama tapizada 2 plz 30364 mueblería otras marcas"
     },
-    /*
     {
-        "id": "30544",
-        "title": "CAMARA DE SEGURIDAD XIAOMI EXTERIOR",
-        "category": "Tecnología",
-        "brand": "XIAOMI / REDMI",
-        "image": "images/30544.png",
-        "desc": "Código: 30544",
-        "tags": "camara de seguridad xiaomi exterior 30544 tecnología xiaomi / redmi"
-    },
-    */
-   {
         "id": "30976",
         "title": "CAMARA DE SEGURIDAD TAPO C410 PARA EXTERIOR  CON PANEL SOLAR",
         "category": "Tecnología",
@@ -664,17 +812,6 @@
         "desc": "Código: 30866",
         "tags": "celular infinix hot 60i 4gb+ 256gb / color purpura 30866 celulares infinix"
     },
-    /*
-    {
-        "id": "30903",
-        "title": "CELULAR INFINIX HOT 60I 8GB+ 256GB / COLOR PLATA",
-        "category": "Celulares",
-        "brand": "INFINIX",
-        "image": "images/30903.jpg",
-        "desc": "Código: 30903",
-        "tags": "celular infinix hot 60i 8gb+ 256gb / color plata 30903 celulares infinix"
-    },
-    */
     {
         "id": "30901",
         "title": "CELULAR INFINIX HOT 60 PRO 8GB + 256GB / COLOR PLATA",
@@ -684,17 +821,6 @@
         "desc": "Código: 30901",
         "tags": "celular infinix hot 60 pro 8gb + 256gb / color plata 30901 celulares infinix"
     },
-    /*/
-    {
-        "id": "30929",
-        "title": "CELULAR INFINIX NOTE 60 8GB + 256GB / COLOR TITANIO",
-        "category": "Celulares",
-        "brand": "INFINIX",
-        "image": "images/30929.jpg",
-        "desc": "Código: 30929",
-        "tags": "celular infinix note 60 8gb + 256gb / color titanio 30929 celulares infinix"
-    },
-    */
     {
         "id": "30960",
         "title": "CELULAR INFINIX SMART20 4GB + 128GB / COLOR AZUL",
@@ -731,17 +857,6 @@
         "desc": "Código: 30959",
         "tags": "celular redmi note 15 pro 8gb + 256gb / color azul 30959 celulares xiaomi / redmi"
     },
-    /*
-    {
-        "id": "30930",
-        "title": "CELULAR REDMI NOTE 15 PRO 5G 8GB + 512 GB / COLOR NEGRO",
-        "category": "Celulares",
-        "brand": "XIAOMI / REDMI",
-        "image": "images/30930.jpg",
-        "desc": "Código: 30930",
-        "tags": "celular redmi note 15 pro 5g 8gb + 512 gb / color negro 30930 celulares xiaomi / redmi"
-    },
-    */
     {
         "id": "30571",
         "title": "CEPILLO DE AIRE REMINGTON ACONDICIONAMIENTO IONICO",
@@ -760,17 +875,6 @@
         "desc": "Código: 30652",
         "tags": "cocina innova brezo croma 4q con horno 30652 electrodomésticos innova"
     },
-    /*
-    {
-        "id": "30626",
-        "title": "COCINA INNOVA GARDENIA 4Q 24\"",
-        "category": "Electrodomésticos",
-        "brand": "INNOVA",
-        "image": "images/30626.jpg",
-        "desc": "Código: 30626",
-        "tags": "cocina innova gardenia 4q 24\" 30626 electrodomésticos innova"
-    },
-    */
     {
         "id": "30649",
         "title": "COCINA INNOVA ALHELI CROMA GAS CON HORNO 6 QUEMADORES",
@@ -861,17 +965,6 @@
         "desc": "Código: 30606",
         "tags": "consola italy audio 8 canales 30606 video y sonido otras marcas"
     },
-    /*
-    {
-        "id": "30767",
-        "title": "CORTADOR DE CABELLO REMINGTON 23 PIEZAS CON PALANCA AJUSTABLE",
-        "category": "Varios",
-        "brand": "REMINGTON",
-        "image": "images/30767.png",
-        "desc": "Código: 30767",
-        "tags": "cortador de cabello remington 23 piezas con palanca ajustable 30767 varios remington"
-    },
-    */
     {
         "id": "30616",
         "title": "DESMALEZADORA SHINDAIWA B450",
@@ -908,18 +1001,7 @@
         "desc": "Código: 30893",
         "tags": "dispensador de agua fria y caliente smar life 20lts panel de vidrio 30893 electro menor smartlife"
     },
-    /*
     {
-        "id": "30165",
-        "title": "ESCALERA MULTIUSO 4X4",
-        "category": "Ferretería",
-        "brand": "OTRAS MARCAS",
-        "image": "images/30165.png",
-        "desc": "Código: 30165",
-        "tags": "escalera multiuso 4x4 30165 ferretería otras marcas"
-    },
-    */
-   {
         "id": "31011",
         "title": "EXPRIMIDOR DE CITRICOS INNOVA 40W 018",
         "category": "Electro Menor",
@@ -973,17 +1055,6 @@
         "desc": "Código: 30994",
         "tags": "freidora de aire innova 3,5lts 30994 electro menor innova"
     },
-    /*
-    {
-        "id": "30943",
-        "title": "FREIDORA DE AIRE INNOVA 4LTS DIGITAL NEGRO 1500W",
-        "category": "Electro Menor",
-        "brand": "INNOVA",
-        "image": "images/30943.jpg",
-        "desc": "Código: 30943",
-        "tags": "freidora de aire innova 4lts digital negro 1500w 30943 electro menor innova"
-    },
-    */
     {
         "id": "30790",
         "title": "FUMIGADORA ECHO SHP800 25LTS",
@@ -993,17 +1064,6 @@
         "desc": "Código: 30790",
         "tags": "fumigadora echo shp800 25lts 30790 agroforestal echo"
     },
-    /*
-    {
-        "id": "30916",
-        "title": "FUMIGADORA FLOWZONE TYPOON3 BATERIA RECARGABLE 15LTS",
-        "category": "Agroforestal",
-        "brand": "OTRAS MARCAS",
-        "image": "images/30916.jpg",
-        "desc": "Código: 30916",
-        "tags": "fumigadora flowzone typoon3 bateria recargable 15lts 30916 agroforestal otras marcas"
-    },
-    */
     {
         "id": "30740",
         "title": "FUMIGADORA LAMBORGINI MOCHILA 20LTS L3200SPS2",
@@ -1130,26 +1190,6 @@
         "desc": "Código: 30928",
         "tags": "laptop asus x1404v 1334u ci5 12gb ram 256 ssd 14\" 30928 laptops asus"
     },
-    /*
-    {
-        "id": "30957",
-        "title": "LAPTOP ASUS E150AFA-WS51 RYZEN 5-40 8GB RAM 512GB SSD 15,6\"",
-        "category": "Laptops",
-        "brand": "ASUS",
-        "image": "images/30957.png",
-        "desc": "Código: 30957",
-        "tags": "laptop asus e150afa-ws51 ryzen 5-40 8gb ram 512gb ssd 15,6\" 30957 laptops asus"
-    },
-    {
-        "id": "30851",
-        "title": "LAPTOP ACER ASP AG15-32P CI3 3096 16GB RAM 512GB SSD 15.6\"",
-        "category": "Laptops",
-        "brand": "ACER",
-        "image": "images/30851.jpg",
-        "desc": "Código: 30851",
-        "tags": "laptop acer.asp.ag15-32p ci3 3096 16gb ram 512gb ssd 15.6\" 30957 laptops acer"
-    },
-    */
     {
         "id": "30826",
         "title": "LAPTOP ACER AL 15-41P-R27P RYZEN 7 5700U 16GB RAM 512GB 15.6\"",
@@ -1159,35 +1199,6 @@
         "desc": "Código: 30826",
         "tags": "laptop acer al 15-41p-r27p ryzen 7 5700u 16gb ram 512gb 15.6\" 30826 laptops acer"
     },
-    /*/
-    {
-        "id": "30885",
-        "title": "LAPTOP HP 250 G10 1334U CI5 16GB RAM 512GB 22D 15,6\"",
-        "category": "Laptops",
-        "brand": "HP",
-        "image": "images/30885.jpg",
-        "desc": "Código: 30885",
-        "tags": "laptop hp 250 g10 1334u ci5 16gb ram 512gb 22d 15,6\" 30885 laptops hp"
-    },
-    {
-        "id": "30840",
-        "title": "LAPTOP HP VICTUS 15-FA2013DX CI5 8GB RAM 512GB SSD NVIDIA GEFORCE 15,6\"",
-        "category": "Laptops",
-        "brand": "HP",
-        "image": "images/30840.jpg",
-        "desc": "Código: 30840",
-        "tags": "laptop hp victus 15-fa2013dx ci5 8gb ram 512gb ssd nvidia geforce 15,6\" 30840 laptops hp"
-    },
-    {
-        "id": "30875",
-        "title": "LAPTOP HP 15-FC0256LA RYZEN 5-7520U 16GB RAM 512GB SSD 15,6\"",
-        "category": "Laptops",
-        "brand": "HP",
-        "image": "images/30875.jpg",
-        "desc": "Código: 30875",
-        "tags": "laptop hp 15-fc0256la ryzen 5-7520u 16gb ram 512gb ssd 15,6\" 30875 laptops hp"
-    },
-    */
     {
         "id": "30624",
         "title": "LAVADORA SAMSUNG 19KG AUTOMATICA",
@@ -1233,17 +1244,6 @@
         "desc": "Código: 30794",
         "tags": "maquina multiusos ducati dbc3300m 30794 agroforestal ducati"
     },
-    /*
-    {
-        "id": "30357",
-        "title": "MICROONDAS INNOVA 20LTS NEGRO",
-        "category": "Electro Menor",
-        "brand": "INNOVA",
-        "image": "images/30357.png",
-        "desc": "Código: 30357",
-        "tags": "microondas innova 20lts negro 30357 electro menor innova"
-    },
-    */
     {
         "id": "30190",
         "title": "MICROONDAS INNOVA 30LTS NEGRO",
@@ -1262,28 +1262,6 @@
         "desc": "Código: 30425",
         "tags": "minibar hisense una puerta negro rr032h 30425 electrodomésticos hisense"
     },
-    /*
-    {
-        "id": "30797",
-        "title": "MICROONDAS RCA 20LTS ROJO",
-        "category": "Electro Menor",
-        "brand": "RCA",
-        "image": "images/30797.jpg",
-        "desc": "Código: 30797",
-        "tags": "microondas rca 20lts rojo 30797 electro menor rca"
-    },
-    */
-    /*
-    {
-        "id": "30349",
-        "title": "MINIBAR INNOVA 2 PUERTAS SILVER 85 LTS",
-        "category": "Electrodomésticos",
-        "brand": "INNOVA",
-        "image": "images/30349.jpg",
-        "desc": "Código: 30349",
-        "tags": "minibar innova 2 puertas silver 85 lts 30349 electrodomésticos innova"
-    },
-    */
     {
         "id": "30981",
         "title": "MOCHILA CON PARLANTE CH-M805",
@@ -1347,17 +1325,6 @@
         "desc": "Código: 30473",
         "tags": "motosierra shindaiwa con barra y cadena 600sx27-70 30473 agroforestal shindaiwa"
     },
-    /*
-    {
-        "id": "30892",
-        "title": "OLLA MULTIFUNCION B+D 6.5 LTS 800W 5 PROGRAMAS LENTA- ASAR - ARROCERA - VAPORERA - DORAR / SALTEAR",
-        "category": "Electro Menor",
-        "brand": "BLACK + DECKER",
-        "image": "images/30892.png",
-        "desc": "Código: 30892",
-        "tags": "olla multifuncion b+d 6.5 lts 800w 5 programas lenta- asar - arrocera - vaporera - dorar / saltear 30892 electro menor black + decker"
-    },
-    */
     {
         "id": "30491",
         "title": "PARLANTE AMPLIFICADO SOBWOOFER 8\" 80W PP5603",
@@ -1421,17 +1388,6 @@
         "desc": "Código: 30445",
         "tags": "parlante profesional beta3 n15amk2 30445 video y sonido beta 3"
     },
-    /*
-    {
-        "id": "30806",
-        "title": "PARLANTE PROFESIONAL BETA3 S215A TIRO LARGO",
-        "category": "Video y Sonido",
-        "brand": "BETA 3",
-        "image": "images/30806.jpg",
-        "desc": "Código: 30806",
-        "tags": "parlante profesional beta3 s215a tiro largo 30806 video y sonido beta 3"
-    },
-    */
     {
         "id": "30527",
         "title": "PISTOLA DE MASAJES OLSKY",
@@ -1468,28 +1424,6 @@
         "desc": "Código: 30825",
         "tags": "proyector xiaomi wanbo t2 max new 30825 tecnologia xiaomi / redmi"
     },
-    /*/
-    {
-        "id": "30771",
-        "title": "REFRIGERADORA HACEB  12 PIES 271 LTS COLOR NEGRO MANIJA EXTERNA",
-        "category": "Electrodomésticos",
-        "brand": "HACEB",
-        "image": "images/30760.png",
-        "desc": "Código: 30760",
-        "tags": "refrigeradora haceb  12 pies 271 lts color negro manija externa 30760 electrodomésticos haceb"
-    },
-    */
-   /*
-    {
-        "id": "30771",
-        "title": "REFRIGERADORA HACEB  16 PIES 404 LTS COLOR NEGRO MANIJA EXTERNA",
-        "category": "Electrodomésticos",
-        "brand": "HACEB",
-        "image": "images/30771.png",
-        "desc": "Código: 30771",
-        "tags": "refrigeradora haceb  16 pies 404 lts color negro manija externa 30771 electrodomésticos haceb"
-    },
-    */
     {
         "id": "30922",
         "title": "REFRIGERADORA HISENSE 179LTS 1 PUERTA CON DISPENSADOR DE AGUA SILVER",
@@ -1544,17 +1478,6 @@
         "desc": "Código: 30936",
         "tags": "sanduchera innova 2 rebanadas negro 30936 electro menor innova"
     },
-    /*
-    {
-        "id": "30662",
-        "title": "SANDUCHERA SMARLIFE 2 REBANADAS NEGRO",
-        "category": "Electro Menor",
-        "brand": "SMARTLIFE",
-        "image": "images/30662.png",
-        "desc": "Código: 30662",
-        "tags": "sanduchera smartlife 2 rebanadas negro 30662 electro menor smartlife"
-    },
-    */
     {
         "id": "30764",
         "title": "SECADOR DE CABELLO REMINGTON 2000W CERAMICA IONES",
@@ -1573,17 +1496,6 @@
         "desc": "Código: 30968",
         "tags": "set de ollas doral 6pcs 30968 varios otras marcas"
     },
-    /*
-    {
-        "id": "30269",
-        "title": "SET DE OLLAS KAISA VILLA 6PCS",
-        "category": "Varios",
-        "brand": "OTRAS MARCAS",
-        "image": "images/30269.png",
-        "desc": "Código: 30269",
-        "tags": "set de ollas kaisa villa 6pcs 30269 varios otras marcas"
-    },
-    */
     {
         "id": "30406",
         "title": "SET DE OLLAS KAISA VILLA KV-1004 12PCS CON TETERA",
@@ -1629,18 +1541,7 @@
         "desc": "Código: 30789",
         "tags": "soldadora century 200a mig, lift, tig 3 en 1 110-220 30789 ferretería otras marcas"
     },
-    /*
     {
-        "id": "30216",
-        "title": "TALADRO ATORNILLADOR CARIOCA INALAMBRICO 400-1350RPM",
-        "category": "Ferretería",
-        "brand": "OTRAS MARCAS",
-        "image": "images/30216.png",
-        "desc": "Código: 30216",
-        "tags": "taladro atornillador carioca inalambrico 400-1350rpm 30216 ferretería otras marcas"
-    },
-    */
-   {
         "id": "30986",
         "title": "TABLET BLACKVIEW TAB 60  4GB + 128 GB COLOR GRIS",
         "category": "Tecnología",
@@ -1685,17 +1586,6 @@
         "desc": "Código: 30914",
         "tags": "television hisense qled 75\" google tv comando de voz 30914 video y sonido hisense"
     },
-    /*
-    {
-        "id": "30880",
-        "title": "TELEVISION HISENSE QLED 85\" GOOGLE TV COMANDO DE VOZ",
-        "category": "Video y Sonido",
-        "brand": "HISENSE",
-        "image": "images/30880.jpg",
-        "desc": "Código: 30880",
-        "tags": "television hisense qled 85\" google tv comando de voz 30880 video y sonido hisense"
-    },
-    */
     {
         "id": "30659",
         "title": "TELEVISION INNOVA LED 32\" GOOGLE TV HD COMANDO DE VOZ",
@@ -1705,18 +1595,7 @@
         "desc": "Código: 30659",
         "tags": "television innova led 32\" google tv hd comando de voz 30659 video y sonido innova"
     },
-    /*/
     {
-        "id": "30668",
-        "title": "TELEVISION INNOVA LED 43\" GOOGLE TV FHD COMANDO DE VOZ",
-        "category": "Video y Sonido",
-        "brand": "INNOVA",
-        "image": "images/30668.jpg",
-        "desc": "Código: 30668",
-        "tags": "television innova led 43\" google tv fhd comando de voz 30668 video y sonido innova"
-    },
-    */
-   {
         "id": "30508",
         "title": "TELEVISION RIVIERA LED  65\" GOOGLE TV 4K UHD COMANDO DE VOZ",
         "category": "Video y Sonido",
@@ -1827,14 +1706,14 @@
         "desc": "Laptops y tecnología de alto rendimiento ASUS"
     },
     "BP": {
-    "bg": "linear-gradient(135deg, #fffde7, #fef08a)",
-    "logo": "https://placehold.co/80x80/fff/ca8a04?text=BP",
-    "desc": "Productos y accesorios de la marca BP"
+        "bg": "linear-gradient(135deg, #fffde7, #fef08a)",
+        "logo": "https://placehold.co/80x80/fff/ca8a04?text=BP",
+        "desc": "Productos y accesorios de la marca BP"
     },
     "ITALYAUDIO": {
-    "bg": "linear-gradient(135deg, #fff1f2, #fecdd3)",
-    "logo": "https://placehold.co/80x80/fff/e11d48?text=Italy+Audio",
-    "desc": "Equipos de sonido y soluciones de audio ITALY AUDIO"
+        "bg": "linear-gradient(135deg, #fff1f2, #fecdd3)",
+        "logo": "https://placehold.co/80x80/fff/e11d48?text=Italy+Audio",
+        "desc": "Equipos de sonido y soluciones de audio ITALY AUDIO"
     },
     "RCA": {
         "bg": "linear-gradient(135deg, #fff5f5, #ffe4e6)",
@@ -1892,7 +1771,7 @@
     "TAPO": 2,
     "SHINERAY": 2,
     "ITALYAUDIO": 2,
-    "BP":3,
+    "BP": 3,
     "CONSUPLAST": 1,
     "BETA 3": 2
 };
@@ -1902,6 +1781,13 @@
         const backBtn = document.getElementById('backBtn');
         const downloadAllBtn = document.getElementById('downloadAllBtn');
         const searchInput = document.getElementById('searchInput');
+
+        // Referencias del modal
+        const previewModal = document.getElementById('previewModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalCode = document.getElementById('modalCode');
+        const modalDownloadBtn = document.getElementById('modalDownloadBtn');
 
         let currentView = 'dashboard';
         let activeFlyersList = []; 
@@ -1999,19 +1885,58 @@
                 card.className = 'flyer-card';
 
                 card.innerHTML = `
-                    <div class="flyer-img-container">
+                    <div class="flyer-img-container" onclick="openPreviewModal('${product.id}')">
                         <img src="${product.image}" alt="${product.title}" onerror="this.src='https://placehold.co/300x300?text=Imagen+${product.id}'" loading="lazy">
                     </div>
                     <div class="flyer-info">
                         <h4 class="flyer-title" title="${product.title}">${product.title}</h4>
-                        <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 12px;">Código: <b>${product.id}</b></p>
-                        <button onclick="downloadSingle('${product.image}', 'DISAR_${product.id}.jpg')" class="download-btn">Descargar Arte</button>
+                        <p style="font-size: 0.75rem; color: #64748b; margin-bottom: 10px;">Código: <b>${product.id}</b></p>
+                        <div class="card-actions">
+                            <button onclick="openPreviewModal('${product.id}')" class="preview-btn">👁️ Previsualizar</button>
+                            <button onclick="downloadSingle('${product.image}', 'DISAR_${product.id}.jpg')" class="download-btn">Descargar Arte</button>
+                        </div>
                     </div>
                 `;
                 mainGrid.appendChild(card);
             });
         }
 
+        /* --- CONTROL DEL MODAL DE PREVISUALIZACIÓN --- */
+        function openPreviewModal(productId) {
+            const product = productDatabase.find(p => String(p.id) === String(productId));
+            if (!product) return;
+
+            modalImage.src = product.image;
+            modalTitle.innerText = product.title;
+            modalCode.innerHTML = `Código de producto: <b>${product.id}</b>`;
+            
+            modalDownloadBtn.onclick = function() {
+                downloadSingle(product.image, `DISAR_${product.id}.jpg`);
+            };
+
+            previewModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Bloquea scroll de fondo
+        }
+
+        function closePreviewModal() {
+            previewModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restaura scroll
+        }
+
+        function closeModalOnOverlay(e) {
+            if (e.target === previewModal) {
+                closePreviewModal();
+            }
+        }
+
+        // Cierre con la tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && previewModal.style.display === 'flex') {
+                closePreviewModal();
+            }
+        });
+
+        /* --- DESCARGA INDIVIDUAL NATIVA --- */
         function downloadSingle(imgUrl, filename) {
             fetch(imgUrl)
                 .then(response => {
@@ -2039,6 +1964,7 @@
                 });
         }
 
+        /* --- DESCARGA EN LOTE DIRECTA --- */
         downloadAllBtn.onclick = function() {
             if (activeFlyersList.length === 0) return;
             
